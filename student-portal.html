@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مغامرة القواعد - تعلم النحو بالمرح</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B9D;
+            --secondary: #FEC84B;
+            --accent: #4ECDC4;
+            --success: #95E1D3;
+            --bg: #FFF5F7;
+            --dark: #2C3E50;
+            --purple: #9D4EDD;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #FFF5F7 0%, #FFE5EC 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .bg-decoration {
+            position: fixed;
+            border-radius: 50%;
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .bg-circle-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            top: -100px;
+            left: -100px;
+            animation: float 20s infinite ease-in-out;
+        }
+        .bg-circle-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent);
+            bottom: -50px;
+            right: -50px;
+            animation: float 15s infinite ease-in-out reverse;
+        }
+        .bg-circle-3 {
+            width: 200px;
+            height: 200px;
+            background: var(--secondary);
+            top: 50%;
+            left: 50%;
+            animation: float 25s infinite ease-in-out;
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+        .login-screen {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-card {
+            background: white;
+            border-radius: 30px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 60px rgba(255, 107, 157, 0.3);
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            animation: slideUp 0.6s ease-out;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .logo {
+            font-size: 4em;
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        h1 {
+            color: var(--primary);
+            font-size: 2.5em;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: var(--dark);
+            opacity: 0.7;
+            margin-bottom: 30px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-weight: 600;
+        }
+        input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 3px solid #F0F0F0;
+            border-radius: 15px;
+            font-size: 1em;
+            font-family: 'Tajawal', sans-serif;
+            transition: all 0.3s ease;
+            text-align: right;
+        }
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            transform: scale(1.02);
+        }
+        .btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--purple) 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Tajawal', sans-serif;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 157, 0.6);
+        }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .error-message {
+            background: #FFE5E5;
+            color: #C62828;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+            animation: shake 0.5s ease;
+        }
+        .error-message.show { display: block; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .register-link {
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .dashboard {
+            display: none;
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .welcome {
+            font-size: 2.5em;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 20px 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .progress-bar {
+            flex: 1;
+            min-width: 200px;
+            height: 20px;
+            background: #F0F0F0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--success) 100%);
+            transition: width 0.6s ease;
+        }
+        .logout-btn {
+            padding: 10px 20px;
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Tajawal', sans-serif;
+        }
+        .logout-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        .levels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .level-card {
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .level-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+        .level-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+        .level-card:hover::before {
+            transform: scaleX(1);
+        }
+        .level-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        .level-title {
+            font-size: 1.8em;
+            font-weight: 900;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        .level-desc {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .level-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+        .badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+        .badge.easy { background: #E8F5E9; color: #2E7D32; }
+        .badge.medium { background: #FFF3E0; color: #E65100; }
+        .badge.hard { background: #FCE4EC; color: #C2185B; }
+        .chapters {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .chapter-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 20px;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        .chapter-card:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+        .chapter-number {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--success));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: 900;
+            color: white;
+        }
+        .chapter-info h3 {
+            font-size: 1.3em;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        .chapter-steps {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .step {
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .step.completed {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+        .step.locked {
+            background: #F5F5F5;
+            color: #999;
+        }
+        .start-btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Tajawal', sans-serif;
+        }
+        .start-btn:hover {
+            transform: scale(1.05);
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 25px;
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            font-family: 'Tajawal', sans-serif;
+        }
+        .back-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        .lesson-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        .lesson-card {
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        .lesson-title {
+            font-size: 2.5em;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .lesson-body {
+            font-family: 'Amiri', serif;
+            font-size: 1.3em;
+            line-height: 2;
+            color: var(--dark);
+        }
+        .lesson-body h3 {
+            color: var(--primary);
+            font-size: 1.5em;
+            margin: 30px 0 15px 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+        .lesson-body p {
+            margin-bottom: 20px;
+        }
+        .lesson-body ul, .lesson-body ol {
+            margin: 15px 0 15px 30px;
+        }
+        .lesson-body li {
+            margin-bottom: 10px;
+        }
+        .example-box {
+            background: linear-gradient(135deg, #FFF9E6 0%, #FFE5B4 100%);
+            border-right: 5px solid var(--secondary);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 1.2em;
+        }
+        .note-box {
+            background: linear-gradient(135deg, #E8F5FF 0%, #D4EDFF 100%);
+            border-right: 5px solid var(--accent);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        .exercise-card {
+            background: linear-gradient(135deg, #E8F5FF 0%, #D4EDFF 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+        .question {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+        .options {
+            display: grid;
+            gap: 15px;
+        }
+        .option {
+            padding: 20px;
+            background: white;
+            border: 3px solid transparent;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+        }
+        .option:hover {
+            border-color: var(--accent);
+            transform: translateX(-5px);
+        }
+        .option.selected {
+            border-color: var(--primary);
+            background: #FFF5F7;
+        }
+        .option.correct {
+            border-color: #4CAF50;
+            background: #E8F5E9;
+            animation: pulse 0.5s ease;
+        }
+        .option.incorrect {
+            border-color: #F44336;
+            background: #FFEBEE;
+            animation: shake 0.5s ease;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .submit-btn {
+            margin-top: 20px;
+            padding: 15px 40px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Tajawal', sans-serif;
+        }
+        .submit-btn:hover {
+            background: var(--success);
+            transform: scale(1.05);
+        }
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            font-weight: 600;
+            display: none;
+        }
+        .feedback.show {
+            display: block;
+            animation: slideUp 0.4s ease;
+        }
+        .feedback.success {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+        .feedback.error {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+        .stars {
+            text-align: center;
+            font-size: 2em;
+            margin: 20px 0;
+        }
+        .star {
+            display: inline-block;
+            margin: 0 5px;
+            animation: starPop 0.5s ease;
+        }
+        @keyframes starPop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--primary);
+            animation: confettiFall 3s ease-out forwards;
+        }
+        @keyframes confettiFall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        @media (max-width: 768px) {
+            .login-card {
+                padding: 40px 30px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            .levels {
+                grid-template-columns: 1fr;
+            }
+            .lesson-title {
+                font-size: 2em;
+            }
+            .chapter-card {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .user-info {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-decoration bg-circle-1"></div>
+    <div class="bg-decoration bg-circle-2"></div>
+    <div class="bg-decoration bg-circle-3"></div>
+
+    <div class="login-screen" id="loginScreen">
+        <div class="login-card">
+            <div class="logo">📚</div>
+            <h1>مغامرة القواعد</h1>
+            <p class="subtitle">تعلّم النحو العربي بطريقة ممتعة!</p>
+            <div class="error-message" id="loginError"></div>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username">اسم المستخدم</label>
+                    <input type="text" id="username" placeholder="أدخل اسمك" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">كلمة المرور</label>
+                    <input type="password" id="password" placeholder="أدخل كلمة المرور" required>
+                </div>
+                <button type="submit" class="btn" id="loginBtn">ابدأ المغامرة! 🚀</button>
+            </form>
+            <div class="register-link">
+                حسابات تجريبية: ahmad/ahmad123 • fatima/fatima123 • sara/sara123
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard" id="dashboard">
+        <div class="header">
+            <h2 class="welcome">مرحباً، <span id="studentName">الطالب</span>! 🌟</h2>
+        </div>
+
+        <div class="user-info">
+            <div>
+                <strong>مستواك الحالي:</strong> <span id="currentLevel">الصف الأول</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="overallProgress" style="width: 0%"></div>
+            </div>
+            <div>
+                <strong>التقدم:</strong> <span id="progressPercent">0%</span>
+            </div>
+            <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
+        </div>
+
+        <div id="levelsView"></div>
+        <div id="chaptersView" class="chapters"></div>
+        <div id="lessonView" class="lesson-content"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000';
+        let currentUser = null;
+        let currentLevel = null;
+        let currentChapter = null;
+        let currentExercise = 0;
+        let score = 0;
+        let selectedOption = null;
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const errorDiv = document.getElementById('loginError');
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'جاري التحقق...';
+            errorDiv.classList.remove('show');
+            try {
+                const response = await fetch(`${API_URL}/api/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    currentUser = data.user;
+                    localStorage.setItem('currentUser', JSON.stringify(data.user));
+                    showDashboard();
+                } else {
+                    errorDiv.textContent = data.message || 'اسم المستخدم أو كلمة المرور غير صحيحة';
+                    errorDiv.classList.add('show');
+                }
+            } catch (error) {
+                errorDiv.textContent = 'حدث خطأ في الاتصال. تأكد من تشغيل السيرفر: node server.js';
+                errorDiv.classList.add('show');
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'ابدأ المغامرة! 🚀';
+            }
+        });
+
+        window.addEventListener('load', () => {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showDashboard();
+            }
+        });
+
+        async function showDashboard() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('studentName').textContent = currentUser.name;
+            document.getElementById('currentLevel').textContent = getLevelName(currentUser.level);
+            await loadLevels();
+            await updateProgress();
+        }
+
+        async function loadLevels() {
+            try {
+                const response = await fetch(`${API_URL}/api/levels`);
+                const levels = await response.json();
+                const levelsView = document.getElementById('levelsView');
+                levelsView.innerHTML = '<div class="levels">' + 
+                    levels.map(level => `
+                        <div class="level-card" onclick="selectLevel(${level.id})">
+                            <div class="level-icon">${level.icon}</div>
+                            <h3 class="level-title">${level.name}</h3>
+                            <p class="level-desc">${level.description}</p>
+                            <div class="level-progress">
+                                <span class="badge ${level.difficulty}">${getDifficultyText(level.difficulty)}</span>
+                                <span>${level.totalChapters} ${level.totalChapters > 10 ? 'فصلاً' : 'فصول'}</span>
+                            </div>
+                        </div>
+                    `).join('') + '</div>';
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function selectLevel(levelId) {
+            currentLevel = levelId;
+            document.getElementById('levelsView').style.display = 'none';
+            await showChapters(levelId);
+        }
+
+        async function showChapters(levelId) {
+            try {
+                const response = await fetch(`${API_URL}/api/chapters/${levelId}`);
+                const chapters = await response.json();
+                const progressResponse = await fetch(`${API_URL}/api/progress/${currentUser.id}`);
+                const progressData = await progressResponse.json();
+                const chaptersView = document.getElementById('chaptersView');
+                chaptersView.innerHTML = `
+                    <button class="back-btn" onclick="backToLevels()">⬅️ العودة للمستويات</button>
+                    <h2 style="font-size: 2em; color: var(--primary); margin-bottom: 30px; text-align: center;">
+                        ${getLevelName(levelId)}
+                    </h2>
+                ` + chapters.map((chapter, index) => {
+                    const progress = progressData.find(p => p.chapterId === chapter.id);
+                    const completed = progress && progress.completed;
+                    return `
+                        <div class="chapter-card">
+                            <div class="chapter-number">${index + 1}</div>
+                            <div class="chapter-info">
+                                <h3>${chapter.title}</h3>
+                                <div class="chapter-steps">
+                                    <span class="step ${completed ? 'completed' : 'locked'}">
+                                        ${completed ? '✓' : '📖'} الدرس
+                                    </span>
+                                    <span class="step ${completed ? 'completed' : 'locked'}">
+                                        ${completed ? '✓' : '🔒'} التمارين
+                                    </span>
+                                    ${completed ? `<span class="step completed">⭐ ${progress.score}%</span>` : ''}
+                                </div>
+                            </div>
+                            <button class="start-btn" onclick="startLesson(${levelId}, ${chapter.id})">
+                                ${completed ? 'إعادة' : 'ابدأ'}
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+                chaptersView.style.display = 'block';
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function startLesson(levelId, chapterId) {
+            try {
+                const response = await fetch(`${API_URL}/api/chapter/${chapterId}`);
+                currentChapter = await response.json();
+                currentExercise = 0;
+                score = 0;
+                document.getElementById('chaptersView').style.display = 'none';
+                showLessonContent();
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function showLessonContent() {
+            const lessonView = document.getElementById('lessonView');
+            lessonView.innerHTML = `
+                <button class="back-btn" onclick="backToChapters()">⬅️ العودة للفصول</button>
+                <div class="lesson-card">
+                    <h2 class="lesson-title">${currentChapter.title}</h2>
+                    <div class="lesson-body">
+                        ${currentChapter.lessonContent}
+                    </div>
+                    <button class="btn" onclick="startExercises()" style="margin-top: 30px;">
+                        ابدأ التمارين! 💪
+                    </button>
+                </div>
+            `;
+            lessonView.style.display = 'block';
+        }
+
+        function startExercises() {
+            showExercise();
+        }
+
+        function showExercise() {
+            if (currentExercise >= currentChapter.exercises.length) {
+                showResults();
+                return;
+            }
+            const exercise = currentChapter.exercises[currentExercise];
+            const lessonView = document.getElementById('lessonView');
+            lessonView.innerHTML = `
+                <button class="back-btn" onclick="showLessonContent()">⬅️ العودة للدرس</button>
+                <div class="lesson-card">
+                    <h2 class="lesson-title">التمرين ${currentExercise + 1} من ${currentChapter.exercises.length}</h2>
+                    <div class="exercise-card">
+                        <div class="question">${exercise.question}</div>
+                        <div class="options" id="options">
+                            ${exercise.options.map((opt, i) => `
+                                <div class="option" onclick="selectOption(${i})" data-index="${i}">
+                                    ${opt}
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="submit-btn" onclick="checkAnswer()">تحقق من الإجابة ✓</button>
+                        <div class="feedback" id="feedback"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectOption(index) {
+            selectedOption = index;
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelector(`[data-index="${index}"]`).classList.add('selected');
+        }
+
+        function checkAnswer() {
+            if (selectedOption === null) {
+                alert('الرجاء اختيار إجابة!');
+                return;
+            }
+            const exercise = currentChapter.exercises[currentExercise];
+            const feedback = document.getElementById('feedback');
+            const options = document.querySelectorAll('.option');
+            if (selectedOption === exercise.correct) {
+                options[selectedOption].classList.add('correct');
+                feedback.className = 'feedback success show';
+                feedback.innerHTML = '🎉 أحسنت! إجابة صحيحة!';
+                score++;
+                createConfetti();
+                setTimeout(() => {
+                    currentExercise++;
+                    selectedOption = null;
+                    showExercise();
+                }, 2000);
+            } else {
+                options[selectedOption].classList.add('incorrect');
+                options[exercise.correct].classList.add('correct');
+                feedback.className = 'feedback error show';
+                feedback.innerHTML = `❌ إجابة خاطئة. الإجابة الصحيحة: ${exercise.options[exercise.correct]}`;
+                setTimeout(() => {
+                    options[selectedOption].classList.remove('incorrect');
+                    options[exercise.correct].classList.remove('correct');
+                    feedback.classList.remove('show');
+                    selectedOption = null;
+                }, 3000);
+            }
+        }
+
+        async function showResults() {
+            const lessonView = document.getElementById('lessonView');
+            const percentage = Math.round((score / currentChapter.exercises.length) * 100);
+            const stars = score === currentChapter.exercises.length ? '⭐⭐⭐' : 
+                         percentage >= 70 ? '⭐⭐' : '⭐';
+            try {
+                await fetch(`${API_URL}/api/progress`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: currentUser.id,
+                        chapterId: currentChapter.id,
+                        completed: percentage >= 70,
+                        score: percentage,
+                        attempts: 1
+                    })
+                });
+                await updateProgress();
+            } catch (error) {
+                console.error('Error:', error);
+            }
+            lessonView.innerHTML = `
+                <div class="lesson-card" style="text-align: center;">
+                    <h2 class="lesson-title">النتيجة النهائية</h2>
+                    <div class="stars">${stars}</div>
+                    <h3 style="font-size: 2em; color: var(--primary); margin: 20px 0;">
+                        ${score} من ${currentChapter.exercises.length}
+                    </h3>
+                    <p style="font-size: 1.3em; margin: 20px 0;">
+                        ${percentage >= 80 ? 'ممتاز! 🎉' : percentage >= 60 ? 'جيد! 👍' : 'حاول مرة أخرى! 💪'}
+                    </p>
+                    <button class="btn" onclick="backToChapters()">العودة للفصول</button>
+                </div>
+            `;
+            if (percentage >= 80) {
+                for (let i = 0; i < 50; i++) {
+                    setTimeout(() => createConfetti(), i * 50);
+                }
+            }
+        }
+
+        async function updateProgress() {
+            try {
+                const response = await fetch(`${API_URL}/api/progress/${currentUser.id}`);
+                const progressData = await response.json();
+                const totalChapters = 40;
+                const completedChapters = progressData.filter(p => p.completed).length;
+                const percentage = Math.round((completedChapters / totalChapters) * 100);
+                document.getElementById('overallProgress').style.width = percentage + '%';
+                document.getElementById('progressPercent').textContent = percentage + '%';
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function createConfetti() {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.background = ['var(--primary)', 'var(--secondary)', 'var(--accent)', 'var(--success)'][Math.floor(Math.random() * 4)];
+            document.body.appendChild(confetti);
+            setTimeout(() => confetti.remove(), 3000);
+        }
+
+        function backToLevels() {
+            document.getElementById('chaptersView').style.display = 'none';
+            document.getElementById('levelsView').style.display = 'block';
+        }
+
+        function backToChapters() {
+            document.getElementById('lessonView').style.display = 'none';
+            showChapters(currentLevel);
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        function getLevelName(levelId) {
+            const names = {
+                1: 'الصف الأول والثاني',
+                2: 'الصف الثالث',
+                3: 'الصف الرابع - السادس'
+            };
+            return names[levelId] || '';
+        }
+
+        function getDifficultyText(difficulty) {
+            const texts = {
+                'easy': 'سهل',
+                'medium': 'متوسط',
+                'hard': 'متقدم'
+            };
+            return texts[difficulty] || difficulty;
+        }
+    </script>
+</body>
+</html>
